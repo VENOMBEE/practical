@@ -1,0 +1,85 @@
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+// Deterministic Partition
+int partitionDet(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] <= pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+
+    swap(arr[i + 1], arr[high]);
+    return i + 1;
+}
+
+// Randomized Partition
+int partitionRandom(int arr[], int low, int high) {
+    int randomIndex = low + rand() % (high - low + 1);
+
+    swap(arr[randomIndex], arr[high]);
+
+    return partitionDet(arr, low, high);
+}
+
+// Deterministic Quick Sort
+void quickSortDet(int arr[], int low, int high) {
+    if (low < high) {
+        int p = partitionDet(arr, low, high);
+
+        quickSortDet(arr, low, p - 1);
+        quickSortDet(arr, p + 1, high);
+    }
+}
+
+// Randomized Quick Sort
+void quickSortRandom(int arr[], int low, int high) {
+    if (low < high) {
+        int p = partitionRandom(arr, low, high);
+
+        quickSortRandom(arr, low, p - 1);
+        quickSortRandom(arr, p + 1, high);
+    }
+}
+
+// Display Array
+void display(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    srand(time(0));
+
+    int n;
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    int arr1[100], arr2[100];
+
+    cout << "Enter array elements: ";
+    for (int i = 0; i < n; i++) {
+        cin >> arr1[i];
+        arr2[i] = arr1[i];
+    }
+
+    quickSortDet(arr1, 0, n - 1);
+    quickSortRandom(arr2, 0, n - 1);
+
+    cout << "\nDeterministic Quick Sort: ";
+    display(arr1, n);
+
+    cout << "Randomized Quick Sort: ";
+    display(arr2, n);
+
+    return 0;
+}

@@ -1,0 +1,132 @@
+
+#include <iostream>
+using namespace std;
+
+// Recursive function
+int fibonacciRecursive(int n) {
+    if (n <= 1) {
+        return n;
+    }
+
+    return fibonacciRecursive(n - 1) +
+           fibonacciRecursive(n - 2);
+}
+
+// Non-recursive (Iterative) function
+int fibonacciIterative(int n) {
+    int a = 0, b = 1, c;
+
+    if (n == 0)
+        return a;
+
+    for (int i = 2; i <= n; i++) {
+        c = a + b;
+        a = b;
+        b = c;
+    }
+
+    return b;
+}
+
+int main() {
+    int n;
+
+    cout << "Enter the number of terms: ";
+    cin >> n;
+
+    cout << "\nRecursive Fibonacci Series: ";
+    for (int i = 0; i < n; i++) {
+        cout << fibonacciRecursive(i) << " ";
+    }
+
+    cout << "\nNon-Recursive Fibonacci Series: ";
+    for (int i = 0; i < n; i++) {
+        cout << fibonacciIterative(i) << " ";
+    }
+
+    return 0;
+}
+
+
+
+
+3. Explanation of Fibonacci Series
+Fibonacci is a series in which each number is the sum of the previous two numbers.
+
+Formula:
+\[
+F(n)=F(n-1)+F(n-2)
+\]
+
+Base conditions:
+- F(0) = 0
+- F(1) = 1
+Example:
+Position	Fibonacci number
+0	0
+1	1
+2	1
+3	2
+4	3
+5	5
+6	8
+
+4. Recursive vs Non-Recursive Approach
+A. Recursive approach
+- A function calls itself to calculate the Fibonacci number.
+- It uses two recursive calls: fibonacciRecursive(n-1) and fibonacciRecursive(n-2).
+- It stops when n becomes 0 or 1.
+- It creates multiple function calls.
+B. Non-recursive approach
+- It uses a for loop instead of calling itself.
+- It maintains three variables: a, b, and c.
+- c = a + b calculates the next number.
+- Values are updated in every iteration.
+5. Time and Space Complexity Analysis
+Approach	Time Complexity	Space Complexity
+Recursive	O(2ⁿ)	O(n)
+Non-recursive	O(n)	O(1)
+
+Why?
+1. Recursive:
+   - Each function call generates two more calls in most cases.
+   - Therefore, the number of calls grows exponentially.
+   - Recursive calls are stored in the function call stack, requiring O(n) space.
+2. Non-recursive:
+   - The loop executes approximately n times.
+   - Only three variables (a, b, c) are used.
+   - Therefore, time complexity is O(n) and space complexity is O(1).
+Note: These complexities describe calculating the nth Fibonacci number. The complete program prints n terms, so its iterative version takes O(n²) time, while the recursive version takes O(2ⁿ) time overall.
+6. Viva Questions and Answers
+Q1. What is recursion?
+
+Recursion is a technique in which a function calls itself to solve a problem.
+
+Q2. What is iteration?
+
+Iteration means repeating a set of statements using loops such as for and while.
+
+Q3. What is the base condition in recursion?
+
+It is the condition that stops recursive function calls. Here, n <= 1 is the base condition.
+
+Q4. Which approach is faster?
+
+The non-recursive approach is faster because it takes O(n) time, whereas the simple recursive approach takes O(2ⁿ) time.
+
+Q5. What is the space complexity of recursion?
+
+O(n), because recursive function calls are stored in the call stack.
+
+Q6. What is O(1) space complexity?
+
+It means constant memory is used, regardless of the input size.
+
+Q7. What is the disadvantage of recursion?
+- More memory usage.
+- More function calls.
+- Slower execution for large inputs.
+- Possibility of stack overflow.
+Q8. Can Fibonacci be solved using Dynamic Programming?
+
+Yes. We can use memoization or tabulation to avoid repeated calculations and achieve O(n) time complexity.

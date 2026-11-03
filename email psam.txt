@@ -1,0 +1,54 @@
+
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import normalize
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# Step 1: Load dataset
+df = pd.read_csv("emails.csv")
+
+print(df.head())
+print(df.shape)
+
+# Step 2: Separate input and output
+X = df.drop(["Email No.", "Prediction"], axis=1)
+y = df["Prediction"]
+
+# Step 3: Normalize data
+X = normalize(X)
+
+# Step 4: Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Step 5: Create models
+knn = KNeighborsClassifier(n_neighbors=5)
+svm = SVC(kernel="rbf", C=10)
+
+# Step 6: Train models
+knn.fit(X_train, y_train)
+svm.fit(X_train, y_train)
+
+# Step 7: Make predictions
+knn_pred = knn.predict(X_test)
+svm_pred = svm.predict(X_test)
+
+# Step 8: Evaluate KNN
+print("KNN Accuracy:", accuracy_score(y_test, knn_pred))
+print("KNN Confusion Matrix:")
+print(confusion_matrix(y_test, knn_pred))
+print(classification_report(y_test, knn_pred))
+
+# Step 9: Evaluate SVM
+print("SVM Accuracy:", accuracy_score(y_test, svm_pred))
+print("SVM Confusion Matrix:")
+print(confusion_matrix(y_test, svm_pred))
+print(classification_report(y_test, svm_pred))
+
+
+
+https://chatgpt.com/share/6ae92ac4-80e8-83ee-9e97-3ab9bdf99102

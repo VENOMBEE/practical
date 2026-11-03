@@ -1,0 +1,119 @@
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n, W;
+
+    cout << "Enter number of items: ";
+    cin >> n;
+
+    int wt[100], val[100];
+
+    cout << "Enter weights of items: ";
+    for (int i = 0; i < n; i++) {
+        cin >> wt[i];
+    }
+
+    cout << "Enter values of items: ";
+    for (int i = 0; i < n; i++) {
+        cin >> val[i];
+    }
+
+    cout << "Enter knapsack capacity: ";
+    cin >> W;
+
+    int dp[101][101] = {0};
+
+    for (int i = 1; i <= n; i++) {
+        for (int w = 1; w <= W; w++) {
+
+            if (wt[i - 1] <= w) {
+                dp[i][w] = max(
+                    val[i - 1] + dp[i - 1][w - wt[i - 1]],
+                    dp[i - 1][w]
+                );
+            }
+            else {
+                dp[i][w] = dp[i - 1][w];
+            }
+        }
+    }
+
+    cout << "Maximum Profit: " << dp[n][W];
+
+    return 0;
+}
+
+Enter number of items: 4
+Enter weights of items: 1 3 4 5
+Enter values of items: 1 4 5 7
+Enter knapsack capacity: 7
+4. Explanation
+The 0/1 Knapsack Problem means:
+- We have a bag with a fixed capacity.
+- Every item has a weight and a value.
+- We need to maximize the total value.
+- Each item can either be selected (1) or rejected (0).
+- We cannot select an item more than once.
+Dynamic Programming uses two choices:
+1. Include the item: Add its value and solve for the remaining capacity.
+2. Exclude the item: Keep the previous maximum value.
+The formula is:
+\[
+DP[i][w]=
+\max\begin{cases}
+val[i-1]+DP[i-1][w-wt[i-1]]\\
+DP[i-1][w]
+\end{cases}
+\]
+
+If the item's weight exceeds the current capacity:
+\[
+DP[i][w]=DP[i-1][w]
+\]
+
+5. Time and Space Complexity
+Complexity	Value
+Time Complexity	\(O(n \times W)\)
+Space Complexity	\(O(n \times W)\)
+
+Here:
+- n = Number of items.
+- W = Knapsack capacity.
+6. Viva Questions
+1. What is the 0/1 Knapsack Problem?
+
+It is an optimization problem where we select items to maximize profit without exceeding the bag's capacity. Each item can be selected only once.
+
+2. Why is it called 0/1 Knapsack?
+
+Because each item has only two choices: 0 means not selected and 1 means selected.
+
+3. Which technique is used to solve this problem?
+
+Dynamic Programming or Branch and Bound.
+
+4. What is Dynamic Programming?
+
+Dynamic Programming is a technique that breaks a problem into smaller overlapping subproblems and stores their results to avoid repeated calculations.
+
+5. What is the difference between Fractional and 0/1 Knapsack?
+0/1 Knapsack	Fractional Knapsack
+Item cannot be divided.	Item can be divided.
+Uses DP or Branch and Bound.	Uses Greedy.
+Takes complete item or rejects it.	Can take a fraction.
+
+6. What is Branch and Bound?
+
+It is an optimization technique that explores possible solutions using a state-space tree and eliminates branches that cannot produce a better solution.
+
+7. What is the time complexity of DP Knapsack?
+
+\(O(n \times W)\).
+
+8. What is the difference between DP and Greedy?
+- DP considers combinations of choices to find the optimal solution.
+- Greedy makes the locally best choice at each step.
+Important practical tip: For your DAA practical, remember the two choices: Include or Exclude. The max() function selects whichever gives maximum profit.

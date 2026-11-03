@@ -1,0 +1,140 @@
+
+#include <iostream>
+#include <queue>
+using namespace std;
+
+// Structure for Huffman Tree
+struct Node {
+    char ch;
+    int freq;
+    Node *left, *right;
+
+    Node(char c, int f) {
+        ch = c;
+        freq = f;
+        left = right = NULL;
+    }
+};
+
+// Compare frequencies (Min Heap)
+struct Compare {
+    bool operator()(Node* a, Node* b) {
+        return a->freq > b->freq;
+    }
+};
+
+// Generate Huffman Codes
+void printCodes(Node* root, string code) {
+    if (root == NULL)
+        return;
+
+    // If leaf node, print character and code
+    if (root->left == NULL && root->right == NULL) {
+        cout << root->ch << " : " << code << endl;
+        return;
+    }
+
+    printCodes(root->left, code + "0");
+    printCodes(root->right, code + "1");
+}
+
+int main() {
+    int n;
+    char ch;
+    int freq;
+
+    priority_queue<Node*, vector<Node*>, Compare> pq;
+
+    cout << "Enter number of characters: ";
+    cin >> n;
+
+    cout << "Enter character and frequency:\n";
+
+    for (int i = 0; i < n; i++) {
+        cin >> ch >> freq;
+        pq.push(new Node(ch, freq));
+    }
+
+    // Build Huffman Tree
+    while (pq.size() > 1) {
+        Node* left = pq.top();
+        pq.pop();
+
+        Node* right = pq.top();
+        pq.pop();
+
+        Node* parent = new Node('$',
+                                left->freq + right->freq);
+
+        parent->left = left;
+        parent->right = right;
+
+        pq.push(parent);
+    }
+
+    cout << "\nHuffman Codes:\n";
+    printCodes(pq.top(), "");
+
+    return 0;
+}
+
+
+
+
+8. Viva Questions and Answers
+Q1. What is Huffman Encoding?
+
+Huffman Encoding is a lossless compression technique that assigns variable-length binary codes to characters based on their frequencies.
+
+Q2. Which strategy is used in Huffman Encoding?
+
+Greedy Strategy.
+
+Q3. Why is it called a greedy algorithm?
+
+Because it always selects the two nodes having the smallest frequencies at every step.
+
+Q4. What is a Min Heap?
+
+A Min Heap is a complete binary tree in which the smallest element is present at the root.
+
+Q5. What is a prefix-free code?
+
+A code in which no character's binary code is the prefix of another character's code.
+
+Q6. Why do we use 0 and 1?
+
+We assign 0 to the left edge and 1 to the right edge to generate binary codes.
+
+Q7. What is lossless compression?
+
+Compression in which the original data can be recovered without losing any information.
+
+Q8. What is the time complexity of Huffman Encoding?
+
+O(n log n), where n is the number of unique characters.
+
+Q9. Where is Huffman Encoding used?
+- ZIP compression.
+- JPEG compression (in its entropy-coding stage).
+- Data compression systems.
+- File compression.
+Q10. What happens if two characters have the same frequency?
+
+Either can be selected first. The resulting codes may differ, but the compression cost can remain optimal.
+
+
+Why O(n log n)?
+- We insert n characters into the Min Heap.
+- We repeatedly remove the two minimum-frequency nodes and insert their combined node.
+- Each heap operation takes O(log n) time.
+- We perform approximately n such operations.
+Therefore:
+\[
+\boxed{O(n\log n)}
+\]
+
+Space Complexity
+\[
+\boxed{O(n)}
+\]

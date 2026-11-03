@@ -1,0 +1,69 @@
+
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+
+# Load dataset
+data = pd.read_csv("Churn_Modelling.csv")
+
+# Remove unnecessary columns
+data = data.drop(['RowNumber', 'CustomerId', 'Surname'], axis=1)
+
+# Convert categorical columns into numbers
+data['Gender'] = LabelEncoder().fit_transform(data['Gender'])
+data['Geography'] = LabelEncoder().fit_transform(data['Geography'])
+
+# Separate input and output
+X = data.drop('Exited', axis=1)
+y = data['Exited']
+
+# Split data into training and testing
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Feature scaling
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Build neural network
+model = Sequential()
+
+# Input layer and first hidden layer
+model.add(Dense(16, activation='relu', input_shape=(X_train.shape[1],)))
+
+# Second hidden layer
+model.add(Dense(8, activation='relu'))
+
+# Output layer
+model.add(Dense(1, activation='sigmoid'))
+
+# Compile model
+model.compile(
+    optimizer='adam',
+    loss='binary_crossentropy',
+    metrics=['accuracy']
+)
+
+# Train model
+model.fit(X_train, y_train, epochs=10, batch_size=32)
+
+# Evaluate model
+loss, accuracy = model.evaluate(X_test, y_test)
+
+print("Accuracy:", accuracy * 100)
+
+# Predict customer churn
+prediction = model.predict(X_test)
+
+# Convert probabilities into 0 or 1
+prediction = (prediction > 0.5).astype(int)
+
+print("Predictions:", prediction[:10])
+
+
+https://chatgpt.com/share/6ae92b73-79f8-83ee-9a5b-f941fa329a00

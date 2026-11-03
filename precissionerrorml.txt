@@ -1,0 +1,48 @@
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score
+
+# Step 1: Load CSV file
+data = pd.read_csv("iris.csv")
+
+# Step 2: Separate input and output
+X = data.drop("species", axis=1)
+y = data["species"]
+
+# Step 3: Split data into training and testing
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Step 4: Create KNN model
+model = KNeighborsClassifier(n_neighbors=3)
+
+# Step 5: Train the model
+model.fit(X_train, y_train)
+
+# Step 6: Predict the output
+y_pred = model.predict(X_test)
+
+# Step 7: Calculate confusion matrix
+cm = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:")
+print(cm)
+
+# Step 8: Calculate accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+# Step 9: Calculate error rate
+error_rate = 1 - accuracy
+print("Error Rate:", error_rate)
+
+# Step 10: Calculate precision
+precision = precision_score(
+    y_test, y_pred, average="macro", zero_division=0
+)
+print("Precision:", precision)
+
+
+https://chatgpt.com/share/6ae92bd2-6758-83ee-b1d7-27227469920f

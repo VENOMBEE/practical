@@ -1,0 +1,131 @@
+
+#include <iostream>
+using namespace std;
+
+int n;
+
+// Print the chessboard
+void printBoard(int board[20][20]) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cout << board[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+// Check whether queen can be placed safely
+bool isSafe(int board[20][20], int row, int col) {
+
+    // Check same column
+    for (int i = 0; i < row; i++) {
+        if (board[i][col] == 1)
+            return false;
+    }
+
+    // Check upper left diagonal
+    for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+        if (board[i][j] == 1)
+            return false;
+    }
+
+    // Check upper right diagonal
+    for (int i = row, j = col; i >= 0 && j < n; i--, j++) {
+        if (board[i][j] == 1)
+            return false;
+    }
+
+    return true;
+}
+
+// Solve using backtracking
+bool solve(int board[20][20], int row) {
+
+    // All queens are placed
+    if (row == n)
+        return true;
+
+    // Try every column
+    for (int col = 0; col < n; col++) {
+
+        if (isSafe(board, row, col)) {
+
+            board[row][col] = 1;
+
+            if (solve(board, row + 1))
+                return true;
+
+            // Backtrack
+            board[row][col] = 0;
+        }
+    }
+
+    return false;
+}
+
+int main() {
+
+    cout << "Enter N: ";
+    cin >> n;
+
+    int board[20][20] = {0};
+
+    // Place first queen at (0,0)
+    board[0][0] = 1;
+
+    if (solve(board, 1)) {
+        cout << "\nFinal N-Queens Matrix:\n";
+        printBoard(board);
+    }
+    else {
+        cout << "Solution does not exist";
+    }
+
+    return 0;
+}
+7. Time and Space Complexity
+- Time Complexity: \(O(N!)\) approximately for the standard row-by-row backtracking approach.
+- Space Complexity: \(O(N^2)\) for the board, plus \(O(N)\) recursion stack.
+8. Viva Questions
+1. What is the N-Queens problem?
+
+It is a problem of placing N queens on an N × N chessboard so that no two queens attack each other.
+
+2. Which technique is used?
+
+Backtracking.
+
+3. What is backtracking?
+
+It is a technique that tries possible solutions and goes back whenever a choice leads to an invalid solution.
+
+4. Why do we check diagonals?
+
+Because queens can attack diagonally.
+
+5. Can two queens be in the same row or column?
+
+No.
+
+6. What does isSafe() do?
+
+It checks the column and both upper diagonals before placing a queen.
+
+7. Why do we use row + 1?
+
+Because we place exactly one queen in each row and then move to the next row.
+
+8. What is the base condition?
+if (row == n)
+    return true;
+
+
+It means all N queens have been successfully placed.
+
+9. What happens if no safe position is found?
+
+The algorithm backtracks, removes the previously placed queen and tries another position.
+
+10. What is the purpose of initializing the first queen?
+
+It fixes the first queen's position, and the algorithm finds positions for all remaining queens.
